@@ -46,6 +46,7 @@ PROTOCOLS = {
     "mitsubishi_heavy_zj": Protocol.PROTOCOL_MITSUBISHI_HEAVY_ZJ,
     "mitsubishi_heavy_zm": Protocol.PROTOCOL_MITSUBISHI_HEAVY_ZM,
     "mitsubishi_heavy_zmp": Protocol.PROTOCOL_MITSUBISHI_HEAVY_ZMP,
+    "mitsubishi_heavy_zs": Protocol.PROTOCOL_MITSUBISHI_HEAVY_ZS,
     "mitsubishi_heavy_kj": Protocol.PROTOCOL_MITSUBISHI_KJ,
     "mitsubishi_msc": Protocol.PROTOCOL_MITSUBISHI_MSC,
     "mitsubishi_msy": Protocol.PROTOCOL_MITSUBISHI_MSY,

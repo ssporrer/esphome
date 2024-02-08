@@ -40,6 +40,7 @@ const std::map<Protocol, std::function<HeatpumpIR *()>> PROTOCOL_CONSTRUCTOR_MAP
     {PROTOCOL_MITSUBISHI_HEAVY_ZJ, []() { return new MitsubishiHeavyZJHeatpumpIR(); }},      // NOLINT
     {PROTOCOL_MITSUBISHI_HEAVY_ZM, []() { return new MitsubishiHeavyZMHeatpumpIR(); }},      // NOLINT
     {PROTOCOL_MITSUBISHI_HEAVY_ZMP, []() { return new MitsubishiHeavyZMPHeatpumpIR(); }},    // NOLINT
+    {PROTOCOL_MITSUBISHI_HEAVY_ZS, []() { return new MitsubishiHeavyZSHeatpumpIR(); }},      // NOLINT
     {PROTOCOL_MITSUBISHI_KJ, []() { return new MitsubishiKJHeatpumpIR(); }},                 // NOLINT
     {PROTOCOL_MITSUBISHI_MSC, []() { return new MitsubishiMSCHeatpumpIR(); }},               // NOLINT
     {PROTOCOL_MITSUBISHI_MSY, []() { return new MitsubishiMSYHeatpumpIR(); }},               // NOLINT
@@ -142,20 +143,34 @@ void HeatpumpIRClimate::transmit_state() {
     swing_h_cmd = HDIR_SWING;
   }
 
-  switch (this->fan_mode.value_or(climate::CLIMATE_FAN_AUTO)) {
-    case climate::CLIMATE_FAN_LOW:
-      fan_speed_cmd = FAN_2;
-      break;
-    case climate::CLIMATE_FAN_MEDIUM:
-      fan_speed_cmd = FAN_3;
-      break;
-    case climate::CLIMATE_FAN_HIGH:
-      fan_speed_cmd = FAN_4;
-      break;
-    case climate::CLIMATE_FAN_AUTO:
-    default:
-      fan_speed_cmd = FAN_AUTO;
-      break;
+  if (this->preset == climate::CLIMATE_PRESET_ECO)
+  {
+    fan_speed_cmd = FAN_SILENT;
+  }
+  else if (this->preset == climate::CLIMATE_PRESET_BOOST)
+  {
+    fan_speed_cmd = FAN_5;
+  }
+  else
+  {
+    switch (this->fan_mode.value_or(climate::CLIMATE_FAN_AUTO)) {
+      case climate::CLIMATE_FAN_QUIET:
+        fan_speed_cmd = FAN_1;
+        break;
+      case climate::CLIMATE_FAN_LOW:
+        fan_speed_cmd = FAN_2;
+        break;
+      case climate::CLIMATE_FAN_MEDIUM:
+        fan_speed_cmd = FAN_3;
+        break;
+      case climate::CLIMATE_FAN_HIGH:
+        fan_speed_cmd = FAN_4;
+        break;
+      case climate::CLIMATE_FAN_AUTO:
+      default:
+        fan_speed_cmd = FAN_AUTO;
+          break;
+    }
   }
 
   switch (this->mode) {
@@ -167,7 +182,7 @@ void HeatpumpIRClimate::transmit_state() {
       power_mode_cmd = POWER_ON;
       operating_mode_cmd = MODE_HEAT;
       break;
-    case climate::CLIMATE_MODE_AUTO:
+    case climate::CLIMATE_MODE_HEAT_COOL:
       power_mode_cmd = POWER_ON;
       operating_mode_cmd = MODE_AUTO;
       break;

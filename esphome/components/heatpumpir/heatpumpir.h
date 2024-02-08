@@ -40,6 +40,7 @@ enum Protocol {
   PROTOCOL_MITSUBISHI_HEAVY_ZJ,
   PROTOCOL_MITSUBISHI_HEAVY_ZM,
   PROTOCOL_MITSUBISHI_HEAVY_ZMP,
+  PROTOCOL_MITSUBISHI_HEAVY_ZS,
   PROTOCOL_MITSUBISHI_KJ,
   PROTOCOL_MITSUBISHI_MSC,
   PROTOCOL_MITSUBISHI_MSY,
@@ -87,9 +88,12 @@ class HeatpumpIRClimate : public climate_ir::ClimateIR {
       : climate_ir::ClimateIR(
             TEMP_MIN, TEMP_MAX, 1.0f, true, true,
             std::set<climate::ClimateFanMode>{climate::CLIMATE_FAN_LOW, climate::CLIMATE_FAN_MEDIUM,
-                                              climate::CLIMATE_FAN_HIGH, climate::CLIMATE_FAN_AUTO},
+                                              climate::CLIMATE_FAN_HIGH, climate::CLIMATE_FAN_AUTO,
+                                              climate::CLIMATE_FAN_QUIET},
             std::set<climate::ClimateSwingMode>{climate::CLIMATE_SWING_OFF, climate::CLIMATE_SWING_HORIZONTAL,
-                                                climate::CLIMATE_SWING_VERTICAL, climate::CLIMATE_SWING_BOTH}) {}
+                                                climate::CLIMATE_SWING_VERTICAL, climate::CLIMATE_SWING_BOTH},
+            std::set<climate::ClimatePreset>{climate::CLIMATE_PRESET_ECO, climate::CLIMATE_PRESET_BOOST,
+                                                climate::CLIMATE_PRESET_NONE}) {}
   void setup() override;
   void set_protocol(Protocol protocol) { this->protocol_ = protocol; }
   void set_horizontal_default(HorizontalDirection horizontal_direction) {
